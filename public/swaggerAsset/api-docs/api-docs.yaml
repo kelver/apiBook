@@ -1,0 +1,223 @@
+openapi: 3.0.0
+info:
+  title: 'APIBooks SMPlaces'
+  version: '1.0.0'
+paths:
+  /api/allInterest:
+    post:
+      tags:
+        - "InterestList"
+      summary: "Returns possible Interest"
+      description: ""
+      operationId: "InterestList"
+      produces:
+        - "application/json"
+      responses:
+        "200":
+          description: "successful operation"
+          content:
+            application/json:
+              example:
+                # Properties of the referenced object
+                data:
+                  id: "1"
+                  texto: "Vendido"
+  /api/auth/login:
+    post:
+      tags:
+        - "Authentication"
+      summary: "Returns user token"
+      requestBody:
+        content:
+          application/json:
+            schema: # Request body contents
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+              example: # Sample object
+                email: example@mail.com
+                password: test#123
+      description: ""
+      operationId: "getToken"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "email"
+          in: "formdata"
+          description: "E-mail registered on the website"
+          required: true
+          type: "string"
+          supportedSubmitMethods: []
+        - name: "password"
+          in: "formdata"
+          description: "Password registered on the website"
+          required: true
+          type: "string"
+      responses:
+        '200':
+          description: A data object.
+          content:
+            application/json:
+              example:
+                # Properties of the referenced object
+                access_token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL2FwaVwvYXV0aFwvbG9naW4iLCJpYXQiOjE2MzM5NTY1MDksImV4cCI6MTYzMzk2MDEwOSwibmJmIjoxNjMzOTU2NTA5LCJqdGkiOiJMclc1cm5lc1RnbnR1cTB4Iiwic3ViIjoxLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.qdNoVYNgjc9RlknrAH0aaH6aBCkSiaAYlenaELiCjJg"
+                token_type: "bearer"
+                expires_in: "259200"
+  /books:
+    get:
+      tags:
+        - "Books"
+      summary: "List books from user"
+      description: ""
+      operationId: "listBook"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+      responses:
+        '200':
+          description: 'Will return `Authenticated`'
+        '401':
+          description: 'You do not have necessary permissions for the resource. Token can be `Expired`, `Invalid` or `Not Found`'
+    post:
+      tags:
+        - "Books"
+      summary: "Add book to user"
+      description: ""
+      operationId: "addBook"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "title"
+          in: "formdata"
+          description: "Title of the book"
+          required: true
+          type: "string"
+        - name: "author"
+          in: "formdata"
+          description: "Author of the book"
+          required: true
+          type: "string"
+        - name: "type_interest_id"
+          in: "formdata"
+          description: "Type of the interest in the book"
+          required: true
+          type: "integer"
+      requestBody:
+        content:
+          application/json:
+            schema: # Request body contents
+              type: object
+              properties:
+                title:
+                  type: string
+                author:
+                  type: string
+                type_interest_id:
+                  type: integer
+              example: # Sample object
+                title: "Clean Code: A Handbook of Agile Software Craftsmanship"
+                author: "Robert C. Martin"
+                type_interest_id: 5
+      responses:
+        "200":
+          description: "successful operation"
+          content:
+            application/json:
+              example:
+                # Properties of the referenced object
+                data:
+                  identify: "123abc-456def-789ghi"
+                  title: "Clean Code: A Handbook of Agile Software Craftsmanship"
+                  author: "Robert C. Martin"
+                  type_interest_id: "Comprar"
+                  created_at: "2021-10-11 at 13:31:24"
+        '401':
+          description: 'You do not have necessary permissions for the resource. Token can be `Expired`, `Invalid` or `Not Found`'
+  /books/{idBook}:
+    put:
+      tags:
+        - "Books"
+      summary: "Edit a book from user."
+      description: ""
+      operationId: "editBook"
+      produces:
+        - "application/xml"
+        - "application/json"
+      parameters:
+        - name: "idBook"
+          in: "path"
+          description: "Identifier from the book."
+          required: true
+          type: "string"
+        - name: "title"
+          in: "formdata"
+          description: "Title of the book"
+          required: true
+          type: "string"
+        - name: "author"
+          in: "formdata"
+          description: "Author of the book"
+          required: true
+          type: "string"
+        - name: "type_interest_id"
+          in: "formdata"
+          description: "Type of the interest in the book"
+          required: true
+          type: "integer"
+      requestBody:
+        content:
+          application/json:
+            schema: # Request body contents
+              type: object
+              properties:
+                title:
+                  type: string
+                author:
+                  type: string
+                type_interest_id:
+                  type: integer
+              example: # Sample object
+                title: "Clean Code: A Handbook of Agile Software Craftsmanship"
+                author: "Robert C. Martin"
+                type_interest_id: 5
+      responses:
+        "200":
+          description: "successful operation"
+          content:
+            application/json:
+              example:
+                # Properties of the referenced object
+                message: "Updated."
+        '401':
+          description: 'You do not have necessary permissions for the resource. Token can be `Expired`, `Invalid` or `Not Found`'
+    delete:
+      tags:
+        - "Books"
+      summary: "Delete a book from list to the user"
+      description: ""
+      operationId: "deleteBook"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "idBook"
+          in: "path"
+          description: "Identifier from the book."
+          required: true
+          type: "string"
+      responses:
+        "204":
+          description: "successful operation"
+        '401':
+          description: 'You do not have necessary permissions for the resource. Token can be `Expired`, `Invalid` or `Not Found`'
